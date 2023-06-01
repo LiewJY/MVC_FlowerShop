@@ -6,12 +6,25 @@ namespace MVC_FlowerShop.Models
     {
         [Key] ///primary key
         public int FlowerID {  get; set; }
-        public int FlowerName { get; set; }
-        public int FlowertType { get; set; }
 
-        public int FlowerPrice { get; set; }
+        [Required]
+        [Display(Name = "Flower Name")]
+        public String FlowerName { get; set; }
 
-        public int FlowerPurchaseDate { get; set; }
+        [Required]
+        [Display(Name = "Flower Type")]
+        public String FlowerType { get; set; }
+
+
+        [Required]
+        [Display(Name = "Price")]
+        public decimal FlowerPrice { get; set; }
+
+
+        [Required]
+        [Display(Name = "Purchase Date")]
+        [DataType(DataType.Date)]
+        public DateTime FlowerPurchaseDate { get; set; }
 
     }
 }
