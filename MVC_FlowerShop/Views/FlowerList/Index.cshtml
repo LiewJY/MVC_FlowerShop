@@ -10,6 +10,12 @@
 <a asp-action="AddNewFlower" asp-controller="FlowerList">Add New Flower</a>
 <br /> 
 <hr />
+<br />
+<form>
+    <label>Enter the flower search string: </label> &nbsp; &nbsp;
+    <input type="text" name="searchString" placeholder="e.g. Rose"/>
+    <button class="btn-outline-dark" type="submit">Search Flower</button>
+</form>
 <table border="1">
     <tr style="background-color:yellow">
         <th>Flower ID</th>
@@ -28,8 +34,11 @@
             <td>@singleflower.FlowerType</td>
             <td>@singleflower.FlowerPrice</td>
             <td>@singleflower.FlowerPurchaseDate</td>
-            <td><button class="btn-info">Edit</button></td>
-            <td><button class="btn-info">Delete</button></td>
+            <form method="post">
+                <td><button class="btn-info" asp-action="editpage" asp-controller="FlowerList" asp-route-fid="@singleflower.FlowerID">Edit</button></td>
+            <td><button class="btn-info" asp-action="deletepage" asp-controller="FlowerList" asp-route-fid="@singleflower.FlowerID">Delete</button></td>
+           
+            </form>
         </tr>
     }
 

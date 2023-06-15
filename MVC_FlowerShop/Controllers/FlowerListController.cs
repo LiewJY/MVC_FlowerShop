@@ -2,6 +2,7 @@
 using MVC_FlowerShop.Models;
 using MVC_FlowerShop.Data;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace MVC_FlowerShop.Controllers
 {
@@ -14,10 +15,15 @@ namespace MVC_FlowerShop.Controllers
             _context = context;
         }
         //function 3: learn how to retrieve data back from flower table
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(String searchString)
         {
             List<Flower> flowerlist = await _context.FlowerTable.ToListAsync();
 
+            //filter the flower befoew display
+            if(!string.IsNullOrEmpty(searchString))
+            {
+                flowerlist = flowerlist.Where(s => s.FlowerName.Contains(searchString)).ToList();
+            }
             return View(flowerlist);
         }
 
@@ -43,6 +49,50 @@ namespace MVC_FlowerShop.Controllers
             return View("AddNewFlower", flower);
         }
 
-    
+
+        //function 3: learn how to delwte item from the flower tablw
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> deletepage(int? fid)
+        {
+            if (fid == null)
+                return NotFound();
+            Flower flower = await _context.FlowerTable.FindAsync(fid);
+
+            if (flower == null)
+                return NotFound();
+
+            _context.FlowerTable.Remove(flower);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "FlowerList");
+        }
+
+        //function 4: learn how to edit the item from the flower table 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> editpage (int ? fid)
+        {
+            if (fid == null)
+                return NotFound();
+            Flower flower = await _context.FlowerTable.FindAsync(fid);
+            if (flower == null)
+                return NotFound();
+
+            return View(flower);
+        }
+
+        //function 5: learn how to update form
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> updatepage(Flower flower)
+        {
+            if(ModelState.IsValid)
+            {
+                _context.FlowerTable.Update(flower);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "FlowerList");
+            }
+            return View("editpage", flower);
+        }
     }
 }
